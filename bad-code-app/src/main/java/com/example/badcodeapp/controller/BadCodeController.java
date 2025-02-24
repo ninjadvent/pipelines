@@ -10,10 +10,7 @@ public class BadCodeController {
 
     @GetMapping("/float")
     public String floatExample() {
-        double a = 0.1;
-        double b = 0.2;
-        double sum = a + b;
-        return "0.1 + 0.2 = " + sum;
+        return calculateSum(0.1, 0.2, "+");
     }
 
     @Autowired
@@ -22,21 +19,31 @@ public class BadCodeController {
     @GetMapping("/nullpointer")
     public String nullPointerExample() {
         String data = badCodeService.getData();
-        return data.toUpperCase(); // This will cause a NullPointerException
+        if (data != null) {
+            return data.toUpperCase(); // This will cause a NullPointerException
+        } else {
+            return "Data is null";
+        }
     }
 
     @GetMapping("/duplicate")
     public String duplicateCodeExample() {
-        // Duplicated code
-        double a = 0.1;
-        double b = 0.2;
-        double sum = a + b;
-        return "0.1 + 0.2 = " + sum;
+        return calculateSum(0.5, 0.25, "-");
+    }
+
+    private String calculateSum(double a, double b, String operation) {
+        double result;
+        if (operation.equals("+")) {
+            result = a + b;
+            return a + " + " + b + " = " + result;
+        } else {
+            result = a - b;
+            return a + " - " + b + " = " + result;
+        }
     }
 
     @GetMapping("/unused")
     public String unusedVariableExample() {
-        String unusedVariable = "This variable is never used";
         return "Unused variable example";
     }
 
@@ -53,8 +60,17 @@ public class BadCodeController {
         int i = 90;
         int j = 100;
 
-        int result = a + b * c - d / e + f % g - h + i * j;
+        int result = performCalculations(a, b, c, d, e, f, g, h, i, j);
+        result = adjustResult(result);
 
+        return "Complex method example: " + result;
+    }
+
+    private int performCalculations(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j) {
+        return a + b * c - d / e + f % g - h + i * j;
+    }
+
+    private int adjustResult(int result) {
         if (result > 5000) {
             result -= 1000;
         } else if (result > 2000) {
@@ -62,7 +78,6 @@ public class BadCodeController {
         } else {
             result += 100;
         }
-
-        return "Complex method example: " + result;
+        return result;
     }
 }
