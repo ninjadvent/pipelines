@@ -11,6 +11,10 @@ public class BadCodeController {
     @GetMapping("/float")
     public String floatExample() {
         return calculateSum(0.1, 0.2, "+");
+    record CalculationParameters(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j) {}
+
+    private int performCalculations(CalculationParameters params) {
+        return params.a() + params.b() * params.c() - params.d() / params.e() + params.f() % params.g() - params.h() + params.i() * params.j();
     }
 
     @Autowired
@@ -19,12 +23,16 @@ public class BadCodeController {
     @GetMapping("/nullpointer")
     public String nullPointerExample() {
         String data = badCodeService.getData();
-        if (data != null) {
-            return data.toUpperCase(); // This will cause a NullPointerException
-        } else {
-            return "Data is null";
-        }
+        try {
+        return data.toUpperCase();
+    } catch (NullPointerException e) {
+        // Log the exception
+        e.printStackTrace();
+        // Return a default value
+        return "Data is null (NullPointerException)";
     }
+    return "Data is null";
+}
 
     @GetMapping("/duplicate")
     public String duplicateCodeExample() {
@@ -49,26 +57,13 @@ public class BadCodeController {
 
     @GetMapping("/complex")
     public String complexMethodExample() {
-        int a = 10;
-        int b = 20;
-        int c = 30;
-        int d = 40;
-        int e = 50;
-        int f = 60;
-        int g = 70;
-        int h = 80;
-        int i = 90;
-        int j = 100;
-
-        int result = performCalculations(a, b, c, d, e, f, g, h, i, j);
+        CalculationParameters params = new CalculationParameters(10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+        int result = performCalculations(params);
         result = adjustResult(result);
 
         return "Complex method example: " + result;
     }
 
-    private int performCalculations(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j) {
-        return a + b * c - d / e + f % g - h + i * j;
-    }
 
     private int adjustResult(int result) {
         if (result > 5000) {
@@ -79,5 +74,22 @@ public class BadCodeController {
             result += 100;
         }
         return result;
+    }
+    
+    @GetMapping("/stringloop")
+    public String stringLoopExample() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            result.append("Iteration ").append(i).append(", ");
+        }
+        return result.toString();
+    }
+
+    private static final double TAX_RATE = 1.1;
+
+    @GetMapping("/magicnumber")
+    public String magicNumberExample() {
+        double price = 100 * TAX_RATE;
+        return "Price: " + price;
     }
 }

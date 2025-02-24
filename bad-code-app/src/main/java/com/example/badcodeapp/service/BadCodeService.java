@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 public class BadCodeService {
 
     public String getData() {
-        return null; // Intentional null return
+        return "";
     }
 }
