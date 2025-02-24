@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+record CalculationParameters(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j) {}
+
 @RestController
 public class BadCodeController {
 
@@ -49,25 +51,11 @@ public class BadCodeController {
 
     @GetMapping("/complex")
     public String complexMethodExample() {
-        int a = 10;
-        int b = 20;
-        int c = 30;
-        int d = 40;
-        int e = 50;
-        int f = 60;
-        int g = 70;
-        int h = 80;
-        int i = 90;
-        int j = 100;
-
-        int result = performCalculations(a, b, c, d, e, f, g, h, i, j);
+        CalculationParameters params = new CalculationParameters(10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+        int result = performCalculations(params);
         result = adjustResult(result);
 
         return "Complex method example: " + result;
-    }
-
-    private int performCalculations(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j) {
-        return a + b * c - d / e + f % g - h + i * j;
     }
 
     private int adjustResult(int result) {
